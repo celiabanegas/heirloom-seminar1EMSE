@@ -1,0 +1,54 @@
+# Frontend pipeline: check the JavaScript → write config.js with the API URL → upload to the static website.
+
+name: web
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", ".github/workflows/web.yml"]
+  pull_request:
+    paths: ["web/**", ".github/workflows/web.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Syntax check
+        run: node --check web/app.js && node --check web/config.js
+
+  deploy:
+    needs: check
+    if: github.event_name != 'pull_request' && vars.AZURE_CLIENT_ID != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Point the frontend at the API
+        run: |
+          mkdir site
+          cp web/index.html web/app.js web/styles.css site/
+          echo "window.HEIRLOOM_CONFIG = { apiUrl: \"${{ vars.API_URL }}\" };" > site/config.js
+          cat site/config.js
+      - name: Log in to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Upload to Blob Storage ($web)
+        run: |
+          az storage blob upload-batch \
+            --account-name "${{ vars.STORAGE_ACCOUNT_NAME }}" \
+            --source site --destination '$web' --overwrite --auth-mode key --only-show-errors
