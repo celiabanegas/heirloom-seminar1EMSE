@@ -27,6 +27,10 @@ provider "azurerm" {
     }
   }
   subscription_id = var.subscription_id
+
+  # The providers this needs (Microsoft.App, DBforPostgreSQL, Storage...) are registered once with the CLI.
+  # Without this, the first plan silently tries to register dozens of providers and can hang for minutes.
+  resource_provider_registrations = "none"
 }
 
 # Storage account and Postgres server names are global in Azure: a random suffix avoids clashes.
