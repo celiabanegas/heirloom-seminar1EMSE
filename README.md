@@ -5,6 +5,11 @@
 A small web app to keep the family's recipes in one place and share them. You create a **cookbook**, send the link
 (or its 8-character code) to the family, and everyone can add, edit and search recipes. No accounts, no passwords.
 
+- **Start with classics:** a new cookbook can come with a few well-known recipes already in it.
+- **Discover:** browse and search a built-in catalog of ~20 recipes (by name, ingredient or category) and add them.
+- **Your special touch:** every added recipe is your own copy: change it freely and write down the family secret,
+  shown highlighted on the recipe. The original stays in the catalog, and the copy remembers what it was based on.
+
 Built for the *Cloud Deployments* seminar (UPM · EMSE) by **Celia Banegas**: three services running in Azure.
 
 ```mermaid
@@ -28,10 +33,13 @@ flowchart LR
 | Method | Path | Does |
 |---|---|---|
 | `GET` | `/health` | API + database check, returns the running version (commit SHA) |
-| `POST` | `/api/cookbooks` | Create a cookbook → `{ code, name }` |
+| `GET` | `/api/catalog?q=&category=` | Search the catalog of classic recipes (accent-insensitive) |
+| `GET` | `/api/catalog/categories` · `/api/catalog/{id}` | Categories · one catalog recipe |
+| `POST` | `/api/cookbooks` | Create a cookbook (`starter: true` adds a few classics) → `{ code, name }` |
 | `GET` | `/api/cookbooks/{code}` | Cookbook name and number of recipes |
 | `GET` | `/api/cookbooks/{code}/recipes?q=` | List recipes, search by title, ingredient or author |
 | `POST` | `/api/cookbooks/{code}/recipes` | Add a recipe |
+| `POST` | `/api/cookbooks/{code}/recipes/from-catalog/{id}` | Copy a catalog recipe into the cookbook |
 | `GET` `PUT` `DELETE` | `/api/cookbooks/{code}/recipes/{id}` | Read, update, delete a recipe |
 
 Interactive docs: `<API URL>/docs`.
@@ -145,7 +153,8 @@ Pull requests run tests/checks only. Azure login uses **OIDC** (a managed identi
   and roles (owner / editor / reader).
 - **Remote Terraform state** in a storage account with locking, and the Container App in Terraform too.
 - **CDN / Front Door** with a custom domain in front of the static website.
-- **Migrations** with a tool (Alembic) instead of `CREATE TABLE IF NOT EXISTS` at startup.
+- **Migrations** with a tool (Alembic) instead of idempotent DDL at startup (guarded today by an advisory lock so
+  several replicas can start at once).
 - **Monitoring:** Application Insights / OpenTelemetry, alerts on errors and latency; `min-replicas 1` to avoid
   cold starts; zone-redundant HA and longer backup retention for the database.
 - **Private registry** (Azure Container Registry) instead of a public Docker Hub image.
