@@ -72,3 +72,31 @@ input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 
 .foot { text-align: center; padding: 16px; font-size: .8rem; color: var(--muted); }
 .foot .ok::before { content: "● "; color: var(--ok); }
 .foot .bad::before { content: "● "; color: var(--bad); }
+
+/* v2: catalog, categories and "your touch" */
+select { display: block; width: 100%; margin-top: 6px; padding: 11px 12px; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+.grid4 { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .grid4 { grid-template-columns: 1fr 1fr; } }
+.check { display: flex; align-items: center; gap: 8px; color: var(--ink); }
+.check input { width: auto; margin: 0; accent-color: var(--accent); }
+.small { font-size: .85rem; }
+.btn.small { padding: 7px 14px; font-size: .9rem; }
+.chip { background: var(--line); color: var(--ink); padding: 1px 10px; border-radius: 999px; font-size: .8rem; }
+.touch { color: var(--accent); font-weight: 600; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+.chip-btn { font: inherit; font-size: .9rem; cursor: pointer; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.chip-btn.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.catalog-card { display: flex; flex-direction: column; gap: 8px; }
+.catalog-card a { text-decoration: none; }
+.catalog-card a:hover strong { color: var(--accent); }
+.catalog-card p { flex: 1; margin: 0; }
+.catalog-card .btn { align-self: flex-start; }
+.empty a { color: var(--accent); }
+.banner { background: color-mix(in srgb, var(--accent) 12%, var(--card)); border-radius: 10px; padding: 10px 14px; margin: 0 0 14px; }
+.banner a { color: var(--accent); font-weight: 600; }
+.touch-box { border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 0 0 20px; }
+.touch-box h2 { color: var(--accent); margin-bottom: 6px; }
+.touch-box p { margin: 4px 0; font-style: italic; }
+.touch-field { color: var(--accent); font-weight: 600; }
+.touch-field textarea { border-color: var(--accent); font-weight: 400; }
