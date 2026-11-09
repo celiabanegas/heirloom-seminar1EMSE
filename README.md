@@ -103,13 +103,17 @@ LOC=$(terraform -chdir=infra/terraform output -raw location)
 DB_URL=$(terraform -chdir=infra/terraform output -raw database_url)
 WEB=$(terraform -chdir=infra/terraform output -raw website_url); WEB=${WEB%/}
 
-az containerapp env create -n cae-heirloom -g "$RG" -l "$LOC"
+az containerapp env create -n cae-heirloom -g "$RG" -l "$LOC" --logs-destination none   # see note below
 az containerapp create -n heirloom-api -g "$RG" --environment cae-heirloom \
   --image docker.io/<dockerhub-user>/heirloom-api:1.0 \
   --ingress external --target-port 8000 --min-replicas 0 --max-replicas 2 \
   --secrets database-url="$DB_URL" \
   --env-vars DATABASE_URL=secretref:database-url CORS_ORIGIN="$WEB"
 ```
+
+> **Note:** in `spaincentral` the CLI failed reading back the Log Analytics workspace it had just created
+> (`ResourceNotFound`, eventual consistency), so the environment runs without it. For production I would enable
+> Log Analytics or Application Insights.
 
 ### 4. Frontend
 
