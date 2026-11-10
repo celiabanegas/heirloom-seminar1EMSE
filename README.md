@@ -139,6 +139,11 @@ Pull requests run tests/checks only. Azure login uses **OIDC** (a managed identi
 - Variables: `DOCKERHUB_USERNAME`, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`,
   `AZURE_RESOURCE_GROUP`, `CONTAINER_APP_NAME`, `STORAGE_ACCOUNT_NAME`, `API_URL`
 
+## Screenshots and video
+
+- Screenshots of the cloud resources: [`images/`](images/) (all of them in one PDF: [`Heirloom_Screenshots_CeliaBanegas.pdf`](images/Heirloom_Screenshots_CeliaBanegas.pdf))
+- Demo video: [`video/HeirloomCeliaBanegas.mp4`](video/HeirloomCeliaBanegas.mp4)
+
 ## Good practices followed
 
 - No secrets in the repo: `DATABASE_URL` lives in a Container App secret, the DB password in an ignored
