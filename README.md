@@ -141,7 +141,7 @@ Pull requests run tests/checks only. Azure login uses **OIDC** (a managed identi
 
 ## Screenshots and video
 
-- Screenshots of the cloud resources: [`images/`](images/) (all of them in one PDF: [`Heirloom_Screenshots_CeliaBanegas.pdf`](images/Heirloom_Screenshots_CeliaBanegas.pdf))
+- Screenshots of the cloud resources: [`images/Heirloom_Screenshots_CeliaBanegas.pdf`](images/Heirloom_Screenshots_CeliaBanegas.pdf)
 - Demo video: [`video/HeirloomCeliaBanegas.mp4`](video/HeirloomCeliaBanegas.mp4)
 
 ## Good practices followed
